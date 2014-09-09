@@ -408,8 +408,8 @@ class PlanPrinter:
         edges   = []
         patches = []
 
-        plt.plot(portals[0],portals[1],'go')
-#        plt.plot(portals[0],portals[1],'bo')
+#        plt.plot(portals[0],portals[1],'go')
+        plt.plot(portals[0],portals[1],'bo')
 
         dashAllEdges()
 
@@ -422,15 +422,15 @@ class PlanPrinter:
             p,q = self.orderedEdges[i]
 #            print p,q,self.a.edge[p][q]['fields']
 
-            plt.plot(portals[0],portals[1],'go')
-#            plt.plot(portals[0],portals[1],'bo')
+#            plt.plot(portals[0],portals[1],'go')
+            plt.plot(portals[0],portals[1],'bo')
 
             # Plot all edges lightly
             dashAllEdges()
 
             for edge in edges:
-                plt.plot(edge[0],edge[1],'g-')
-#                plt.plot(edge[0],edge[1],'b-')
+#                plt.plot(edge[0],edge[1],'g-')
+                plt.plot(edge[0],edge[1],'b-')
 
             # We'll display the new fields in red
             newPatches = []
@@ -471,14 +471,14 @@ class PlanPrinter:
             ax.cla()
 
             for patch in newPatches:
-                patch.set_facecolor(GREEN)
-#                patch.set_facecolor(BLUE)
+#                patch.set_facecolor(GREEN)
+                patch.set_facecolor(BLUE)
 
-        plt.plot(portals[0],portals[1],'go')
-#        plt.plot(portals[0],portals[1],'bo')
+#        plt.plot(portals[0],portals[1],'go')
+        plt.plot(portals[0],portals[1],'bo')
         for edge in edges:
-            plt.plot(edge[0],edge[1],'g-')
-#            plt.plot(edge[0],edge[1],'b-')
+#            plt.plot(edge[0],edge[1],'g-')
+            plt.plot(edge[0],edge[1],'b-')
         for patch in patches:
             ax.add_patch(patch)
 
@@ -496,7 +496,8 @@ class PlanPrinter:
 
         oldedges = []
 
-        plt.plot(portals[0],portals[1],'go')
+#        plt.plot(portals[0],portals[1],'go')
+        plt.plot(portals[0],portals[1],'bo')
 
         plt.axis('off')
         plt.savefig(self.outputDir+'depth_-1.png')
@@ -516,7 +517,8 @@ class PlanPrinter:
             if len(newedges) == 0:
                 break
             
-            plt.plot(portals[0],portals[1],'go')
+#            plt.plot(portals[0],portals[1],'go')
+            plt.plot(portals[0],portals[1],'bo')
 
             for edge in oldedges:
                 plt.plot(edge[0],edge[1],'k-')
@@ -532,7 +534,8 @@ class PlanPrinter:
 
             depth += 1
 
-        plt.plot(portals[0],portals[1],'go')
+#        plt.plot(portals[0],portals[1],'go')
+        plt.plot(portals[0],portals[1],'bo')
 
         for edge in oldedges:
             plt.plot(edge[0],edge[1],'k-')
@@ -540,4 +543,5 @@ class PlanPrinter:
         plt.axis('off')
         plt.savefig(self.outputDir+'depth_%s.png'%depth)
         plt.clf()
+
 

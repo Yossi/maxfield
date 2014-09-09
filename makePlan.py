@@ -29,7 +29,7 @@ Description:
       number of agents you specify (default: "lastPlan.pkl")
 
 Options:
-  -b         Make maps blue instead of green
+  -g         Make maps green instead of blue
   -n agents  Number of agents [default: 1]
   -s extra_samples Number of iterations to run optimization [default: 50]  [max: 100]
 
@@ -63,10 +63,10 @@ def main():
     BLUE  = '#2ABBFF'
     #GREEN = (0.0 , 1.0 , 0.0 , 0.3)
     #BLUE  = (0.0 , 0.0 , 1.0 , 0.3)
-    COLOR = GREEN
+    COLOR = BLUE
 
-    if args['-b']:
-        COLOR = BLUE
+#    if args['-g']:
+#        COLOR = GREEN
 
     output_directory = ''
     if args['<output_directory>'] != None:
