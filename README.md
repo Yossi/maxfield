@@ -24,7 +24,7 @@ Before you do that, make sure you have these libraries available:
 
     sudo apt-get install python-dev libfreetype6-dev libpng-dev libjpeg62 libjpeg62-dev
 
-Do note that PIL may need to be manually fixed to look for these libraries if you are on a 64bit system. Details here: http://askubuntu.com/questions/156484/how-do-i-install-python-imaging-library-pil
+Do note that PIL may need to be manually fixed to look for these libraries if you are on a 64bit system. [Details][4]
 
 # Example
 
@@ -124,3 +124,4 @@ different plan.
 [1]: https://www.enthought.com/downloads/
 [2]: https://www.python.org/download/releases/2.7
 [3]: https://pypi.python.org/pypi/pip
+[4]: http://askubuntu.com/questions/156484/how-do-i-install-python-imaging-library-pil
