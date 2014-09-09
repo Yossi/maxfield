@@ -7,12 +7,12 @@ way (and the order) that creates the most fields. This is harder than it sounds.
 If you're working on more than a dozen portals, learning to use this code may
 be faster than planning by hand.
 
-This code follows the procedure in my [YouTube video][0].
+This code follows the procedure in this [YouTube video][0].
 
 
 # Prerequisites
 
-You'll need [Python][2] (I've got 2.7) as well as networkx, numpy, and matplotlib.
+You'll need [Python][2] (I've got 2.7) as well as networkx, numpy, matplotlib and PIL.
 
 You can get these setup easily with the [Enthought Python Distribution][1].
 
@@ -20,17 +20,23 @@ You can use [pip][3] to install the dependencies via:
 
     pip install -r requirements.txt
 
+Before you do that, make sure you have these libraries available:
+
+    sudo apt-get install python-dev libfreetype6-dev libpng-dev libjpeg62 libjpeg62-dev
+
+Do note that PIL may need to be manually fixed to look for these libraries if you are on a 64bit system. Details here: http://askubuntu.com/questions/156484/how-do-i-install-python-imaging-library-pil
+
 # Example
 
 I'll be distributing this code with a file EXAMPLE.csv. Try running
 
-    python makePlan.py 4 EXAMPLE.csv out/ output.pkl
+    python makePlan.py -n 4 -s 75 EXAMPLE.csv out/ output.pkl
 
 This will put a bunch of files into the "out/" directory (see OUTPUT FILE LIST)
 
 Now try running
 
-    python makePlan.py 3 out/output.pkl
+    python makePlan.py -n 3 -s 75 out/output.pkl
 
 This uses the plan stored in output.pkl instead of calculating a new one. It will create files for 3 agents instead of 4.
 
@@ -85,12 +91,12 @@ No promises
 
     input_file:  One of two types of files:
         .csv   format:
-            portal name , latE6 , lngE6 [,keys]
+            PORTAL NAME, INTEL MAP LINK, (OPTIONAL:) NUMBER OF KEYS AVAILABLE
+
+            Example:
+            Catholic Church of the Holy Comforter, https://www.ingress.com/intel?ll=38.031745,-78.478592&z=18&pll=38.031796,-78.479439, 3
 
             portal name should not contain commas
-            latE6 and lngE6 should be the portal's global coordinates
-            E6 means times 10^6 (no decimal)
-                e.g. the Big Ben portal is at 51500775,-124466
             keys (optional parameter) is the number of keys you have for the portal
             If you leave this blank, the program assumes you have no keys
 
