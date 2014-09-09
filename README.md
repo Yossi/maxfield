@@ -16,6 +16,8 @@ You'll need [Python][2] (I've got 2.7) as well as networkx, numpy, matplotlib an
 
 You can get these setup easily with the [Enthought Python Distribution][1].
 
+On windows, it is STRONGLY recommended to use the above python distribution or at least to find precompiled versions of the required libraries. DO NOT ATTEMPT TO USE PIP. That way lies madness. 
+
 You can use [pip][3] to install the dependencies via:
 
     pip install -r requirements.txt
