@@ -7,7 +7,7 @@ import agentOrder
 import networkx as nx
 import electricSpring
 from cStringIO import StringIO
-import Image
+from PIL import Image
 import urllib
 import math
 

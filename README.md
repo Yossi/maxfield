@@ -12,7 +12,7 @@ This code follows the procedure in this [YouTube video][0].
 
 # Prerequisites
 
-You'll need [Python][2] (I've got 2.7) as well as networkx, numpy, matplotlib and PIL.
+You'll need [Python][2] (I've got 2.7) as well as networkx, numpy, matplotlib and Pillow.
 
 You can get these setup easily with the [Enthought Python Distribution][1].
 
@@ -25,8 +25,6 @@ You can use [pip][3] to install the dependencies via:
 Before you do that, make sure you have these libraries available:
 
     sudo apt-get install python-dev libfreetype6-dev libpng-dev libjpeg62 libjpeg62-dev
-
-Do note that PIL may need to be manually fixed to look for these libraries if you are on a 64bit system. [Details][4]
 
 # Example
 
@@ -126,4 +124,3 @@ different plan.
 [1]: https://www.enthought.com/downloads/
 [2]: https://www.python.org/download/releases/2.7
 [3]: https://pypi.python.org/pypi/pip
-[4]: http://askubuntu.com/questions/156484/how-do-i-install-python-imaging-library-pil
