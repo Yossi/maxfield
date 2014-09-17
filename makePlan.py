@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 """
 Usage:
-  makePlan.py [-b] [-n <agent_count>] [-s <extra_samples>] <input_file> [<output_directory>] [<output_file>]
+  makePlan.py [-g] [-n <agent_count>] [-s <extra_samples>] <input_file>
 
 Description:
   This is for Ingress. If you don't know what that is, you're lost.
@@ -11,7 +11,6 @@ Description:
 
       - semi-colon delimited file formatted as portal name; link; (optional) keys
 
-          portal name should not contain commas
           link is the portal link from the Intel map
           keys is the number of keys you have for the portal
 
@@ -19,83 +18,66 @@ Description:
 
           this can be used to make the same plan with a different number of agents
 
-  output_directory:
-      directory in which to put all output (default is the working directory)
-
-  output_file:
-      name for a .pkl file containing information on the plan
-
-      if you use this for the input file, the same plan will be produced with the
-      number of agents you specify (default: "lastPlan.pkl")
-
 Options:
-  -g         Make maps green instead of blue
-  -n agents  Number of agents [default: 1]
-  -s extra_samples Number of iterations to run optimization [default: 50]  [max: 100]
+  -g                Make maps green instead of blue
+  -n agents         Number of agents [default: 1]
+  -s extra_samples  Number of iterations to run optimization [default: 100]
 
-Original version by jpeterbaker
-22 July 2014 - tvw updates csv file format
-15 August 2014 - tvw updates with google API, other things
-                 switchted to ; delimited file
 """
 
+import os
 import sys
-from docopt import docopt
+import errno
+import docopt
+import pickle
+import datetime
 
 import networkx as nx
-from lib import maxfield,PlanPrinterMap,geometry,agentOrder
-import pickle
-
 import matplotlib.pyplot as plt
 
+from lib import maxfield, PlanPrinterMap, geometry, agentOrder
+
+
 def main():
-    args = docopt(__doc__)
-
-    # We will take many samples in an attempt to reduce number of keys to farm
-    # This is the number of samples to take since the last improvement
-    EXTRA_SAMPLES = 50
-
+    timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     np = geometry.np
 
-    #GREEN = 'g'
-    #BLUE  = 'b'
+    args = docopt.docopt(__doc__)
+
+
     GREEN = '#3BF256' # Actual faction text colors in the app
     BLUE  = '#2ABBFF'
-    #GREEN = (0.0 , 1.0 , 0.0 , 0.3)
-    #BLUE  = (0.0 , 0.0 , 1.0 , 0.3)
-    COLOR = BLUE
+    COLOR = GREEN if args['-g'] else BLUE
 
-#    if args['-g']:
-#        COLOR = GREEN
-
-    output_directory = ''
-    if args['<output_directory>'] != None:
-        output_directory = args['<output_directory>']
-        if output_directory[-1] != '/':
-            output_directory += '/'
-
-    output_file = 'lastPlan.pkl'
-    if args['<output_file>'] != None:
-        output_file = args['<output_file>']
-        if not output_file[-3:] == 'pkl':
-            print 'WARNING: output file should end in "pkl" or you cannot use it as input later'
 
     nagents = int(args['-n'])
-    if nagents < 0:
+    if nagents <= 0:
         print 'Number of agents should be positive'
         exit()
 
+
+    # We will take many samples in an attempt to reduce number of keys to farm
+    # This is the number of samples to take since the last improvement
     EXTRA_SAMPLES = int(args['-s'])
-    if EXTRA_SAMPLES < 0:
-        print 'Number of extra samples should be positive'
+    if EXTRA_SAMPLES not in range(1, 101):
+        print 'Number of extra samples must be between 1 and 100'
         exit()
-    elif EXTRA_SAMPLES > 100:
-        print 'Extra samples may not be more than 100'
-        exit()
+
 
     input_file = args['<input_file>']
+    name, ext = os.path.splitext(os.path.basename(input_file))
 
-    if input_file[-3:] != 'pkl':
+    try:
+        os.makedirs(name)
+    except OSError as exception:
+        if exception.errno != errno.EEXIST:
+            raise
+
+    output_directory = name + os.sep
+    output_file = name + '_' + timestamp + '.pkl'
+
+
+    if ext != 'pkl':
         a = nx.DiGraph()
 
         locs = []
@@ -128,7 +110,7 @@ def main():
         if i > 65:
             print 'Limit of 65 portals may be optimized at once'
             exit()
-        
+
         n = a.order() # number of nodes
 
         locs = np.array(locs,dtype=float)
@@ -174,7 +156,7 @@ def main():
                 TK += keylack
                 if keylack > MK:
                     MK = keylack
-            
+
             weightedlack = TK+2*MK
 
             allTK.append(TK)
@@ -240,7 +222,7 @@ def main():
     #    with open(output_directory+output_file,'w') as fout:
     #        pickle.dump(a,fout)
 
-    PP = PlanPrinterMap.PlanPrinter(a,output_directory,nagents,COLOR)
+    PP = PlanPrinterMap.PlanPrinter(a, output_directory, nagents, COLOR)
     PP.keyPrep()
     PP.agentKeys()
     PP.planMap()
@@ -262,4 +244,4 @@ def main():
     print "Total AP: {0}".format(portal_ap+link_ap+field_ap)
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()
