@@ -42,39 +42,39 @@ This uses the plan stored in the .pkl file instead of calculating a new one. It 
 
 ### OUTPUT FILE LIST
 
-	keyPrep.txt
-		List of portals, their numbers on the map, and how many keys are needed
+keyPrep.txt
+    List of portals, their numbers on the map, and how many keys are needed
 
-	keys_for_agent_M_of_N.txt
-		List of keys agent number M will need (if N agents are participating)
+keys_for_agent_M_of_N.txt
+    List of keys agent number M will need (if N agents are participating)
 
-	links_for_agent_M_of_N.txt
-		List of ALL the links
-		Total distance traveled and AP earned by agent number M
-			- Except for the links marked with a star (*), the links should be made IN THE ORDER LISTED
-			- Links with a star can be made out of order, but only EARLY i.e. BEFORE their position in the list (this can save you time)
-			- The links that agent number M makes are marked with underscores__
-			- The first portal listed is the origin portal (where the agent must be)
-			- The second portal listed is the destination portal (for which the agent must have a key)
+links_for_agent_M_of_N.txt
+    List of ALL the links
+    Total distance traveled and AP earned by agent number M
+        - Except for the links marked with a star (*), the links should be made IN THE ORDER LISTED
+        - Links with a star can be made out of order, but only EARLY i.e. BEFORE their position in the list (this can save you time)
+        - The links that agent number M makes are marked with underscores__
+        - The first portal listed is the origin portal (where the agent must be)
+        - The second portal listed is the destination portal (for which the agent must have a key)
 
-	portalMap.png
-		A map showing the locations of the portals
-	linkMap.png
-		A map showing the locations of portals and links
-			- Up is north
-			- Portal numbers increase from north to south
-			- Portal numbers match "keyPrep.txt" and "links_for_agent_M_of_N.txt"
-			- Link numbers match those in the link schedules "links_for_agent_M_of_N.txt"
+portalMap.png
+    A map showing the locations of the portals
+linkMap.png
+    A map showing the locations of portals and links
+        - Up is north
+        - Portal numbers increase from north to south
+        - Portal numbers match "keyPrep.txt" and "links_for_agent_M_of_N.txt"
+        - Link numbers match those in the link schedules "links_for_agent_M_of_N.txt"
 
-	ownershipPrep.txt
-		List of portals whose first link is incoming
-			- These portals need to be captured and fully powered before the linking operation
-		List of portals whose first link is outgoing
-			- You may be able to save time by capturing and fully powering these portals DURING the linking operation
+ownershipPrep.txt
+    List of portals whose first link is incoming
+        - These portals need to be captured and fully powered before the linking operation
+    List of portals whose first link is outgoing
+        - You may be able to save time by capturing and fully powering these portals DURING the linking operation
 
-	*.pkl
-		A Python pickle file containing all portal and plan information
-			- The default name is "<name of the csv file>-<timestamp>.pkl"
+*.pkl
+    A Python pickle file containing all portal and plan information
+        - The default name is "<name of the csv file>-<timestamp>.pkl"
 
 # Warranty
 
