@@ -63,7 +63,7 @@ This uses the plan stored in the .pkl file instead of calculating a new one. It 
 		A map showing the locations of portals and links
 			- Up is north
 			- Portal numbers increase from north to south
-			- Portal numbers match "keyPrep.txt" and "linkes_for_agent_M_of_N.txt"
+			- Portal numbers match "keyPrep.txt" and "links_for_agent_M_of_N.txt"
 			- Link numbers match those in the link schedules "links_for_agent_M_of_N.txt"
 
 	ownershipPrep.txt
@@ -72,9 +72,9 @@ This uses the plan stored in the .pkl file instead of calculating a new one. It 
 		List of portals whose first link is outgoing
 			- You may be able to save time by capturing and fully powering these portals DURING the linking operation
 
-	`*`.pkl
+	*.pkl
 		A Python pickle file containing all portal and plan information
-			- The default name is "*<name of the csv file>*-*<timestamp>*.pkl"
+			- The default name is "<name of the csv file>-<timestamp>.pkl"
 
 # Warranty
 
