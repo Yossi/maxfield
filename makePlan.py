@@ -31,19 +31,23 @@ import errno
 import docopt
 import pickle
 import datetime
+import urlparse
+import unicodecsv
 
 import networkx as nx
 import matplotlib.pyplot as plt
 
+from ftfy import guess_bytes
 from lib import maxfield, PlanPrinterMap, geometry, agentOrder
 
 
+def p(x): # halfassed debugging thing. remove in final version
+    print x
+    exit()
+
 def main():
-    timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-    np = geometry.np
-
     args = docopt.docopt(__doc__)
-
+    timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
 
     GREEN = '#3BF256' # Actual faction text colors in the app
     BLUE  = '#2ABBFF'
@@ -79,41 +83,41 @@ def main():
 
     if ext != 'pkl':
         a = nx.DiGraph()
+        np = geometry.np
 
         locs = []
 
-        i = 0
         # each line should be name,intel_link,keys
-        with open(input_file,'r') as fin:
-            for line in fin:
-                parts = line.split(';')
-
-                if len(parts) < 2:
-                    break
-
+        with open(input_file) as fin:
+            text, encoding = guess_bytes(fin.read())
+            rows = unicodecsv.reader(text.encode('utf-8').strip().split('\n'), encoding='utf-8')
+            for i, row in enumerate(rows):
                 a.add_node(i)
-                a.node[i]['name'] = parts[0].strip()
+                a.node[i]['name'] = row[0]
 
-                coords = (parts[1].split('pll='))[1]
+                url = ','.join(row[1:4]).strip()
+                if not url.startswith('http'):
+                    print 'Unable to parse input file. Did you forget to put quotes around a name containing a comma?'
+                    exit()
+
+                coords = urlparse.parse_qs(urlparse.urlparse(url).query)['pll'][0] # this could have been done the quick and dirty way, but I chose this way. It just felt right
                 coord_parts = coords.split(',')
                 lat = int(float(coord_parts[0]) * 1.e6)
                 lon = int(float(coord_parts[1]) * 1.e6)
-                locs.append( np.array([lat,lon],dtype=int) )
+                locs.append(np.array([lat, lon], dtype=int)) # why does this have to be a numpy array?
 
-                if len(parts) < 3:
+                if len(row) <= 4:
                     a.node[i]['keys'] = 0
                 else:
-                    a.node[i]['keys'] = int(parts[3])
+                    a.node[i]['keys'] = int(row[4])
 
-                i += 1
 
-        if i > 65:
+        n = a.order() # number of nodes
+        if n > 65:
             print 'Limit of 65 portals may be optimized at once'
             exit()
 
-        n = a.order() # number of nodes
-
-        locs = np.array(locs,dtype=float)
+        locs = np.array(locs, dtype=float)
 
         # This part assumes we're working with E6 latitude-longitude data
         locs = geometry.e6LLtoRads(locs)
@@ -140,7 +144,7 @@ def main():
 
         sinceImprove = 0
 
-        while sinceImprove<EXTRA_SAMPLES:
+        while sinceImprove < EXTRA_SAMPLES:
             b = a.copy()
 
             sinceImprove += 1
@@ -165,19 +169,17 @@ def main():
 
             if weightedlack < bestlack:
                 sinceImprove = 0
-                print 'IMPROVEMENT:\n\ttotal: %s\n\tmax:   %s\n\tweighted: %s'%\
-                       (TK,MK,weightedlack)
+                print 'IMPROVEMENT:\ttotal: %s\tmax:   %s\tweighted: %s\t%s tries since improvement' % (TK, MK, weightedlack, sinceImprove)
                 bestgraph = b
-                bestlack  = weightedlack
+                bestlack = weightedlack
                 bestTK  = TK
                 bestMK  = MK
             else:
-                print 'this time:\n\ttotal: %s\n\tmax:   %s\n\tweighted: %s'%\
-                       (TK,MK,weightedlack)
+                print 'this time:\ttotal: %s\tmax:   %s\tweighted: %s\t%s tries since improvement' % (TK, MK, weightedlack, sinceImprove)
 
             if weightedlack <= 0:
                 print 'KEY PERFECTION'
-                bestlack  = weightedlack
+                bestlack = weightedlack
                 bestTK  = TK
                 bestMK  = MK
                 break
@@ -185,8 +187,6 @@ def main():
             # if all([ b.node[i]['keys'] <= b.out_degree(i) for i in xrange(n) ]):
             #     print 'All keys used. Improvement impossible'
             #     break
-
-            print '%s tries since improvement'%sinceImprove
 
         if bestgraph == None:
             print 'EXITING RANDOMIZATION LOOP WITHOUT SOLUTION!'
