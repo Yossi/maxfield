@@ -103,7 +103,7 @@ No promises
             Example:
             Cupid's Span, https://www.ingress.com/intel?ll=37.791541,-122.390014&z=17&pll=37.791541,-122.390014, 3
 
-            if portal name contains commas, wrap it in quotes. Example: "Zipcar, 12345"
+            If portal name contains commas, wrap it in quotes. Example: "Zipcar, 12345"
             keys (optional parameter) is the number of keys you have for the portal
             If you leave this blank, the program assumes you have no keys
 
