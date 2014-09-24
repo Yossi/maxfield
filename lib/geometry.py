@@ -104,7 +104,7 @@ def sphereTriContains(pts,x):
     returns True iff x is inside the triangle
         yes, three points make two triangles, but we assume the small one
 
-    behavior in border cases ont guaranteed
+    behavior in border cases not guaranteed
     '''
     x = x.reshape([-1,3])
 
