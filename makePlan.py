@@ -150,7 +150,7 @@ def main():
             sinceImprove += 1
 
             if not maxfield.maxFields(b):
-                print 'Randomization failure\nThe program may work if you try again. It is more likely to work if you remove some protals.'
+                print 'Randomization failure\n\tThe program may work if you try again. It is more likely to work if you remove some portals.'
                 continue
 
             TK = 0
@@ -169,13 +169,13 @@ def main():
 
             if weightedlack < bestlack:
                 sinceImprove = 0
-                print 'IMPROVEMENT:\ttotal: %s\tmax:   %s\tweighted: %s\t%s tries since improvement' % (TK, MK, weightedlack, sinceImprove)
+                print 'IMPROVEMENT:\ttotal: {}\tmax: {}\tweighted: {}\t{} tries since improvement'.format(TK, MK, weightedlack, sinceImprove)
                 bestgraph = b
                 bestlack = weightedlack
                 bestTK  = TK
                 bestMK  = MK
             else:
-                print 'this time:\ttotal: %s\tmax:   %s\tweighted: %s\t%s tries since improvement' % (TK, MK, weightedlack, sinceImprove)
+                print 'this time:\ttotal: {}\tmax: {}\tweighted: {}\t{} tries since improvement'.format(TK, MK, weightedlack, sinceImprove)
 
             if weightedlack <= 0:
                 print 'KEY PERFECTION'
@@ -193,7 +193,7 @@ def main():
             print ''
             exit()
 
-        print 'Choosing plan requiring %s additional keys, max of %s from single portal'%(bestTK,bestMK)
+        print 'Choosing plan requiring {} additional keys, max of {} from single portal'.format(bestTK, bestMK)
 
         plt.clf()
         plt.scatter(allTK,allMK,c=allWeights,marker='o')
