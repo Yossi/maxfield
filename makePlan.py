@@ -24,7 +24,6 @@ Options:
   -g                Make maps green instead of blue
   -n agents         Number of agents [default: 1]
   -s extra_samples  Number of iterations to run optimization [default: 100]
-
 """
 
 import os
