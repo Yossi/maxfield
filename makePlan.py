@@ -2,6 +2,7 @@
 """
 Usage:
   makePlan.py [-g] [-n <agent_count>] [-s <extra_samples>] <input_file>
+  makePlan.py -h | --help
 
 Description:
   Create an optimal (maybe) plan for hyperfielding portals.
@@ -19,6 +20,7 @@ Description:
           this can be used to make the same plan with a different number of agents
 
 Options:
+  -h --help         Show this screen.
   -g                Make maps green instead of blue
   -n agents         Number of agents [default: 1]
   -s extra_samples  Number of iterations to run optimization [default: 100]
