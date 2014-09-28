@@ -4,7 +4,7 @@ Usage:
   makePlan.py [-g] [-n <agent_count>] [-s <extra_samples>] <input_file>
 
 Description:
-  This is for Ingress. If you don't know what that is, you're lost.
+  Create an optimal (maybe) plan for hyperfielding portals.
 
   input_file:
       One of two types of files:
@@ -26,7 +26,6 @@ Options:
 """
 
 import os
-import sys
 import errno
 import docopt
 import pickle
