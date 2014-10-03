@@ -1,4 +1,5 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
+
 """
 Usage:
   makePlan.py [-g] [-n <agent_count>] [-s <extra_samples>] <input_file>
@@ -21,7 +22,7 @@ Description:
 
 Options:
   -h --help         Show this screen.
-  -g                Make maps green instead of blue
+  -g                Make maps hideous instead of blue
   -n agents         Number of agents [default: 1]
   -s extra_samples  Number of iterations to run optimization [default: 100]
 """
@@ -41,8 +42,9 @@ from ftfy import guess_bytes
 from lib import maxfield, PlanPrinterMap, geometry, agentOrder
 
 
-def p(x): # halfassed debugging thing. remove in final version
-    print x
+def debug(x): # halfassed debugging thing. remove in final version
+    import pprint
+    pprint.pprint(x)
     exit()
 
 def main():
@@ -205,7 +207,7 @@ def main():
         cbar.set_label('Optimization Weighting (lower=better)')
         plt.savefig(output_directory+'optimization.png')
 
-        a = bestgraph
+        a = bestgraph # remember: a = nx.DiGraph()
 
         # Attach to each edge a list of fields that it completes
         for t in a.triangulation:
@@ -218,6 +220,7 @@ def main():
     else:
         with open(input_file,'r') as fin:
             a = pickle.load(fin)
+
     #    agentOrder.improveEdgeOrder(a)
     #    with open(output_directory+output_file,'w') as fout:
     #        pickle.dump(a,fout)
