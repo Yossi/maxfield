@@ -11,7 +11,7 @@ from PIL import Image
 import urllib
 import math
 
-# returns the points in a shrunken toward their centroid
+# returns the points in "a" shrunken toward their centroid
 def shrink(a):
     centroid = a.mean(1).reshape([2,1])
     return  centroid + .9*(a-centroid)
@@ -22,7 +22,7 @@ def commaGroup(n):
     return ','.join([ s[max(i,0):i+3] for i in range(len(s)-3,-3,-3)][::-1])
 
 class PlanPrinter:
-    def __init__(self,a,outputDir,nagents,color='#FF004D'):
+    def __init__(self, a, outputDir, nagents, color='#FF004D'):
         self.a = a
         self.n = a.order() # number of nodes
         self.m = a.size()  # number of links

@@ -41,7 +41,7 @@ from ftfy import guess_bytes
 from lib import maxfield, PlanPrinterMap, geometry, agentOrder
 
 
-def p(x): # halfassed debugging thing. remove in final version
+def debug(x): # halfassed debugging thing. remove in final version
     print x
     exit()
 
@@ -204,13 +204,13 @@ def main():
         cbar = plt.colorbar()
         cbar.set_label('Optimization Weighting (lower=better)')
         plt.savefig(output_directory+'optimization.png')
-
-        a = bestgraph
+        
+        a = bestgraph # remember: a = nx.DiGraph()
 
         # Attach to each edge a list of fields that it completes
         for t in a.triangulation:
             t.markEdgesWithFields()
-
+        
         agentOrder.improveEdgeOrder(a)
 
         with open(output_directory+output_file,'w') as fout:
@@ -218,11 +218,13 @@ def main():
     else:
         with open(input_file,'r') as fin:
             a = pickle.load(fin)
+            
     #    agentOrder.improveEdgeOrder(a)
     #    with open(output_directory+output_file,'w') as fout:
     #        pickle.dump(a,fout)
 
     PP = PlanPrinterMap.PlanPrinter(a, output_directory, nagents, COLOR)
+    debug(dir(PP))
     PP.keyPrep()
     PP.agentKeys()
     PP.planMap()

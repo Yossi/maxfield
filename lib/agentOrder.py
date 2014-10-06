@@ -257,7 +257,7 @@ def improveEdgeOrder(a):
             i+=1
 
         if i<j:
-#            print 'moving %s before %s'%(orderedEdges[j],orderedEdges[i])
+            #print 'moving %s before %s'%(orderedEdges[j],orderedEdges[i])
             # Move link j to be just before link i
             orderedEdges =  orderedEdges[   :i] +\
                            [orderedEdges[  j  ]]+\
