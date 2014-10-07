@@ -212,11 +212,11 @@ def main():
         # Attach to each edge a list of fields that it completes
         for t in a.triangulation:
             t.markEdgesWithFields()
-        
+
         agentOrder.improveEdgeOrder(a)
 
         with open(output_directory+output_file,'w') as fout:
-            pickle.dump(a,fout)
+            pickle.dump(a, fout)
     else:
         with open(input_file,'r') as fin:
             a = pickle.load(fin)
@@ -226,7 +226,6 @@ def main():
     #        pickle.dump(a,fout)
 
     PP = PlanPrinterMap.PlanPrinter(a, output_directory, nagents, COLOR)
-    debug(dir(PP))
     PP.keyPrep()
     PP.agentKeys()
     PP.planMap()

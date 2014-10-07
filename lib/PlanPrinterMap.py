@@ -2,7 +2,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import geometry
-np = geometry.np
+import numpy as np
 import agentOrder
 import networkx as nx
 import electricSpring
@@ -10,6 +10,11 @@ from cStringIO import StringIO
 from PIL import Image
 import urllib
 import math
+
+def debug(x=None): # halfassed debugging thing. remove in final version
+    import pprint
+    pprint.pprint(x)
+    exit()
 
 # returns the points in "a" shrunken toward their centroid
 def shrink(a):
@@ -22,33 +27,33 @@ def commaGroup(n):
     return ','.join([ s[max(i,0):i+3] for i in range(len(s)-3,-3,-3)][::-1])
 
 class PlanPrinter:
-    def __init__(self, a, outputDir, nagents, color='#FF004D'):
+    def __init__(self, a, outputDir, nagents, color='#FF004D'): # very red purple
         self.a = a
         self.n = a.order() # number of nodes
         self.m = a.size()  # number of links
         
-        self.latmax = max([self.a.node[i]['geo'][0] for i in self.a.node.keys()])*180./3.141592654
-        self.latmin = min([self.a.node[i]['geo'][0] for i in self.a.node.keys()])*180./3.141592654
-        self.lonmax = max([self.a.node[i]['geo'][1] for i in self.a.node.keys()])*180./3.141592654
-        self.lonmin = min([self.a.node[i]['geo'][1] for i in self.a.node.keys()])*180./3.141592654
-        self.loncenter = (self.lonmax-self.lonmin)/2. + self.lonmin
-        self.latcenter = (self.latmax-self.latmin)/2. + self.latmin
-        print "Center",self.latcenter,self.loncenter
+        self.latmax = max([self.a.node[i]['geo'][0] for i in self.a.node.keys()]) * 180. / np.pi
+        self.latmin = min([self.a.node[i]['geo'][0] for i in self.a.node.keys()]) * 180. / np.pi
+        self.lonmax = max([self.a.node[i]['geo'][1] for i in self.a.node.keys()]) * 180. / np.pi
+        self.lonmin = min([self.a.node[i]['geo'][1] for i in self.a.node.keys()]) * 180. / np.pi
+        self.loncenter = (self.lonmax - self.lonmin) / 2. + self.lonmin
+        self.latcenter = (self.latmax - self.latmin) / 2. + self.latmin
+        print "Center", self.latcenter, self.loncenter
         
         self.nagents = nagents
         self.outputDir = outputDir
         self.color = color
 
         # if the ith link to be made is (p,q) then orderedEdges[i] = (p,q)
-        self.orderedEdges = [None]*self.m
+        self.orderedEdges = [None] * self.m
         for e in a.edges_iter():
             self.orderedEdges[a.edge[e[0]][e[1]]['order']] = e
 
         # movements[i][j] is the index (in orderedEdges) of agent i's jth link
-        self.movements = agentOrder.getAgentOrder(a,nagents,self.orderedEdges)
-
+        self.movements = agentOrder.getAgentOrder(a, nagents, self.orderedEdges)
+        
         # link2agent[i] is the agent that will make the ith link
-        self.link2agent = [-1]*self.m
+        self.link2agent = [-1] * self.m
         for i in range(nagents):
             for e in self.movements[i]:
                 self.link2agent[e] = i
@@ -57,7 +62,7 @@ class PlanPrinter:
         self.agentkeyneeds = np.zeros([self.nagents,self.n],dtype=int)
         for i in xrange(self.nagents):
             for e in self.movements[i]:
-                p,q = self.orderedEdges[e]
+                p, q = self.orderedEdges[e]
                 self.agentkeyneeds[i][q] += 1
 
         self.names = np.array([a.node[i]['name'] for i in xrange(self.n)])

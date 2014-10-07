@@ -33,7 +33,8 @@ def branch_bound(root,lo,hi):
 
     states = np.array([root])
 
-    print 'Planning agent movements:'
+    if splitSize != 1:
+        print 'Planning agent movements:'
 
     # This is only for the printout
     counter = 0
@@ -46,16 +47,15 @@ def branch_bound(root,lo,hi):
             # TODO For now, assume all states finish splitting at the same time
             break
 
-        branches = np.array([ state.children for state in states])
+        branches = np.array([state.children for state in states])
         branches.shape = (-1)
 
         branchvalues = [branch.value for branch in branches]
         bestlo = np.argsort(branchvalues)[:lo]
         states = branches[bestlo]
-
-        print counter
+        if splitSize != 1: print counter
         counter += 1
-
+    
     return states[0],states[0].value
 
 if __name__=='__main__':

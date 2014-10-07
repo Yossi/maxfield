@@ -151,7 +151,7 @@ def getVisits(dists,order,nagents):
     '''
     root = OTSPstate(dists,order,nagents)
     LO = MAX_BRANCHES // nagents
-    state,value = branch_bound.branch_bound(root, LO , LO*nagents)
+    state, value = branch_bound.branch_bound(root, LO, LO*nagents)
 
     return state.visit2agent,state.time
 

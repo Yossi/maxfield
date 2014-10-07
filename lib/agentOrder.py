@@ -1,6 +1,5 @@
-
 import geometry
-np = geometry.np
+import numpy as np
 
 import orderedTSP
 
@@ -154,32 +153,32 @@ def getAgentOrder(a,nagents,orderedEdges):
     Time spent navigating linking menu
         a.linktime
     '''
-    geo = np.array([ a.node[i]['geo'] for i in xrange(a.order())])
+    geo = np.array([a.node[i]['geo'] for i in xrange(a.order())])
     d = geometry.sphereDist(geo,geo)
 #    print d
     order = [e[0] for e in orderedEdges]
 
     # Reduce sequences of links made from same portal to single entry
-    condensed , mult = condenseOrder(order)
+    condensed, mult = condenseOrder(order)
 
-    link2agent , times = orderedTSP.getVisits(d,condensed,nagents)
+    link2agent, times = orderedTSP.getVisits(d,condensed,nagents)
 
     # Expand links made from same portal to original count
     link2agent = expandOrder(link2agent,mult)
 
     # If agents communicate sequential completions all at once, we avoid waiting for multiple messages
     # To find out how many communications will be sent, we count the number of same-agent link sequences
-    condensed , mult = condenseOrder(link2agent)
+    condensed, mult = condenseOrder(link2agent)
     numCOMMs = len(condensed)
 
     # Time that must be spent just walking
-    a.walktime = times[-1]/WALKSPEED
+    a.walktime = times[-1] / WALKSPEED
     # Waiting for link completion messages to be sent
-    a.commtime = numCOMMs*COMMTIME
+    a.commtime = numCOMMs * COMMTIME
     # Time spent navigating linking menu
-    a.linktime = a.size()*LINKTIME
+    a.linktime = a.size() * LINKTIME
 
-    movements = [None]*nagents
+    movements = [None] * nagents
 
     for i in xrange(len(link2agent)):
         try:    
