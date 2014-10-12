@@ -40,7 +40,7 @@ import matplotlib.pyplot as plt
 
 from ftfy import guess_bytes
 from lib import maxfield, PlanPrinterMap, geometry, agentOrder
-
+from lib.PlanPrinterMap import GREEN, BLUE
 
 def debug(x): # halfassed debugging thing. remove in final version
     import pprint
@@ -51,8 +51,6 @@ def main():
     args = docopt.docopt(__doc__)
     timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
 
-    GREEN = '#3BF256' # Actual faction text colors in the app
-    BLUE  = '#2ABBFF'
     COLOR = GREEN if args['-g'] else BLUE
 
 

@@ -11,6 +11,9 @@ from PIL import Image
 import urllib
 import math
 
+GREEN = '#3BF256' # Actual faction text colors in the app
+BLUE  = '#2ABBFF'
+
 def debug(x=None): # halfassed debugging thing. remove in final version
     import pprint
     pprint.pprint(x)
@@ -38,11 +41,14 @@ class PlanPrinter:
         self.lonmin = min([self.a.node[i]['geo'][1] for i in self.a.node.keys()]) * 180. / np.pi
         self.loncenter = (self.lonmax - self.lonmin) / 2. + self.lonmin
         self.latcenter = (self.latmax - self.latmin) / 2. + self.latmin
-        print "Center", self.latcenter, self.loncenter
+        #print "Center", self.latcenter, self.loncenter
         
         self.nagents = nagents
         self.outputDir = outputDir
         self.color = color
+        self.colorLetter = 'b'
+        if color == GREEN:
+            self.colorLetter = 'g'
 
         # if the ith link to be made is (p,q) then orderedEdges[i] = (p,q)
         self.orderedEdges = [None] * self.m
@@ -204,13 +210,7 @@ class PlanPrinter:
             self.ptmap   = dict([(i,self.a.node[i]['xy']) for i in xrange(self.n) ])
             nx.draw_networkx_edge_labels(b,self.ptmap,edgelabels)
 
-        # edge_color does not seem to support arbitrary colors easily
-        if self.color == '#3BF256':
-            nx.draw_networkx_edges(b,self.ptmap,edge_color='g')
-        elif self.color == '#2ABBFF':
-            nx.draw_networkx_edges(b,self.ptmap,edge_color='b')
-        else:
-            nx.draw_networkx_edges(b,self.ptmap,edge_color='k')
+        nx.draw_networkx_edges(b,self.ptmap,edge_color=self.colorLetter)
         plt.axis('off')
 
     def planMap(self):
@@ -247,7 +247,7 @@ class PlanPrinter:
 
         # google maps API
         url = "http://maps.googleapis.com/maps/api/staticmap?center={0},{1}&size={2}x{3}&zoom={4}&sensor=false".format(self.latcenter,self.loncenter,map_xwidth,map_ywidth,zoom)
-        print url
+        #print url
         buffer = StringIO(urllib.urlopen(url).read())
         image = Image.open(buffer)
         plt.clf()
@@ -413,8 +413,7 @@ class PlanPrinter:
         edges   = []
         patches = []
 
-#        plt.plot(portals[0],portals[1],'go')
-        plt.plot(portals[0],portals[1],'bo')
+        plt.plot(portals[0],portals[1],self.colorLetter+'o')
 
         dashAllEdges()
 
@@ -427,15 +426,13 @@ class PlanPrinter:
             p,q = self.orderedEdges[i]
 #            print p,q,self.a.edge[p][q]['fields']
 
-#            plt.plot(portals[0],portals[1],'go')
-            plt.plot(portals[0],portals[1],'bo')
+            plt.plot(portals[0],portals[1],self.colorLetter+'o')
 
             # Plot all edges lightly
             dashAllEdges()
 
             for edge in edges:
-#                plt.plot(edge[0],edge[1],'g-')
-                plt.plot(edge[0],edge[1],'b-')
+                plt.plot(edge[0],edge[1],self.colorLetter+'-')
 
             # We'll display the new fields in red
             newPatches = []
@@ -444,8 +441,6 @@ class PlanPrinter:
                 coords = np.array([ self.a.node[v]['xy'] for v in tri ])
                 newPatches.append(Polygon(shrink(coords.T).T,facecolor=RED,\
                                                  edgecolor=INVISIBLE))
-#                newPatches.append(Polygon(shrink(coords.T).T,facecolor=GREEN,\
-#                                                 edgecolor=INVISIBLE))
 #            print '%s new patches'%len(newPatches)
             
             aptotal += 313+1250*len(newPatches)
@@ -476,14 +471,14 @@ class PlanPrinter:
             ax.cla()
 
             for patch in newPatches:
-#                patch.set_facecolor(GREEN)
-                patch.set_facecolor(BLUE)
+                if self.colorLetter == 'g':
+                    patch.set_facecolor(GREEN)
+                else:
+                    patch.set_facecolor(BLUE)
 
-#        plt.plot(portals[0],portals[1],'go')
-        plt.plot(portals[0],portals[1],'bo')
+        plt.plot(portals[0],portals[1],self.colorLetter+'o')
         for edge in edges:
-#            plt.plot(edge[0],edge[1],'g-')
-            plt.plot(edge[0],edge[1],'b-')
+            plt.plot(edge[0],edge[1],self.colorLetter+'-')
         for patch in patches:
             ax.add_patch(patch)
 
@@ -501,8 +496,7 @@ class PlanPrinter:
 
         oldedges = []
 
-#        plt.plot(portals[0],portals[1],'go')
-        plt.plot(portals[0],portals[1],'bo')
+        plt.plot(portals[0],portals[1],self.colorLetter+'o')
 
         plt.axis('off')
         plt.savefig(self.outputDir+'depth_-1.png')
@@ -539,8 +533,7 @@ class PlanPrinter:
 
             depth += 1
 
-#        plt.plot(portals[0],portals[1],'go')
-        plt.plot(portals[0],portals[1],'bo')
+        plt.plot(portals[0],portals[1],self.colorLetter+'o')
 
         for edge in oldedges:
             plt.plot(edge[0],edge[1],'k-')
@@ -548,5 +541,3 @@ class PlanPrinter:
         plt.axis('off')
         plt.savefig(self.outputDir+'depth_%s.png'%depth)
         plt.clf()
-
-
