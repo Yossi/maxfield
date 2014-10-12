@@ -107,12 +107,11 @@ def main():
                 lat = int(float(coord_parts[0]) * 1.e6)
                 lon = int(float(coord_parts[1]) * 1.e6)
                 locs.append(np.array([lat, lon], dtype=int)) # why does this have to be a numpy array?
-
-                if len(row) <= 4:
+                
+                if '.' in row[-1]:
                     a.node[i]['keys'] = 0
                 else:
-                    a.node[i]['keys'] = int(row[4])
-
+                    a.node[i]['keys'] = int(row[-1])
 
         n = a.order() # number of nodes
         if n > 65:
