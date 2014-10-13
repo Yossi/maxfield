@@ -80,8 +80,7 @@ def main():
     output_directory = name + os.sep
     output_file = name + '_' + timestamp + '.pkl'
 
-
-    if ext != 'pkl':
+    if ext != '.pkl':
         a = nx.DiGraph()
         np = geometry.np
 
