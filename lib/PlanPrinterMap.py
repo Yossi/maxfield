@@ -97,11 +97,7 @@ class PlanPrinter:
             fout.write( 'Keys Needed | Lacked |\n')
             for i in self.nameOrder:
                 keylack = max(self.a.in_degree(i)-self.a.node[i]['keys'],0)
-                fout.write(rowFormat.format(\
-                    self.a.in_degree(i),\
-                    keylack,\
-                    self.names[i]\
-                ))
+                fout.write(rowFormat.format(self.a.in_degree(i), keylack, self.names[i]))
 
         unused   = set(xrange(self.n))
         infirst  = []
