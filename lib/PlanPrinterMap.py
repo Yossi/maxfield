@@ -10,6 +10,7 @@ from cStringIO import StringIO
 from PIL import Image
 import urllib
 import math
+import codecs
 
 GREEN = '#3BF256' # Actual faction text colors in the app
 BLUE  = '#2ABBFF'
@@ -92,8 +93,8 @@ class PlanPrinter:
         self.num_fields = -1
 
     def keyPrep(self):
-        rowFormat = '{0:11d} | {1:6d} | {2}\n'
-        with open(self.outputDir+'keyPrep.txt','w') as fout:
+        rowFormat = u'{0:11d} | {1:6d} | {2}\n'
+        with codecs.open(self.outputDir+'keyPrep.txt', 'w', encoding='utf-8') as fout:
             fout.write( 'Keys Needed | Lacked |\n')
             for i in self.nameOrder:
                 keylack = max(self.a.in_degree(i)-self.a.node[i]['keys'],0)
@@ -114,24 +115,23 @@ class PlanPrinter:
         infirst.sort()
         outfirst.sort()
 
-        with open(self.outputDir+'ownershipPrep.txt','w') as fout:
+        with codecs.open(self.outputDir+'ownershipPrep.txt', 'w', encoding='utf-8') as fout:
             fout.write("These portals' first links are incoming\n")
             fout.write('They should be at full resonators before linking\n')
             for s in infirst:
-                fout.write('  %s\n'%s)
+                fout.write(u'  {0}\n'.format(s))
 
             fout.write("\nThese portals' first links are outgoing\n")
             fout.write('Their resonators can be applied when first agent arrives\n')
             for s in outfirst:
-                fout.write('  %s\n'%s)
+                fout.write(u'  {0}\n'.format(s))
 
 
     def agentKeys(self):
-        rowFormat = '%4s %4s %s\n'
+        rowFormat = u'{0:4} {1:4} {2}\n'
         for agent in range(self.nagents):
-            with open(self.outputDir+'keys_for_agent_%s_of_%s.txt'\
-                    %(agent+1,self.nagents),'w') as fout:
-                fout.write('Keys for Agent %s of %s\n\n'%(agent+1,self.nagents))
+            with codecs.open(self.outputDir+'keys_for_agent_%s_of_%s.txt' % (agent+1,self.nagents), 'w', encoding='utf-8') as fout:
+                fout.write('Keys for Agent %s of %s\n\n' % (agent+1,self.nagents))
                 fout.write('Map# Keys Name\n')
 
                 for portal in self.nameOrder:
@@ -140,11 +140,7 @@ class PlanPrinter:
                     if self.agentkeyneeds[agent,portal] == 0:
                         keys = ''
                         
-                    fout.write(rowFormat%(\
-                        self.nslabel[portal],\
-                        keys,\
-                        self.names[portal]\
-                    ))
+                    fout.write( rowFormat.format(self.nslabel[portal], keys, self.names[portal]) )
 
     def drawBlankMap(self):
         plt.plot(self.xy[:,0],self.xy[:,1],'o',ms=16,color=self.color)
@@ -256,7 +252,7 @@ class PlanPrinter:
             for j in xrange(self.n):
                 i = self.posOrder[j]
                 plt.plot(self.xy[i,0],self.xy[i,1],'o',color=self.color,
-                        label="{0} - {1}".format(str(j), self.names[i]))
+                        label=u"{0} - {1}".format(str(j), self.names[i]))
 
                 displaces = self.xy[i] - self.xy
                 displaces[i,:] = np.inf
@@ -325,12 +321,11 @@ class PlanPrinter:
                 agentexps[i] += 313 + 1250*len(self.a.edge[p][q]['fields'])
 
         # Different formatting for the agent's own links
-        plainStr = '{0:4d}{1:1s} {2: 5d}{3:5d} {4:s}\n            {5:4d} {6:s}\n\n'
-        hilitStr = '{0:4d}{1:1s} {2:_>5d}{3:5d} {4:s}\n            {5:4d} {6:s}\n\n'
+        plainStr = u'{0:4d}{1:1s} {2: 5d}{3:5d} {4:s}\n            {5:4d} {6:s}\n\n'
+        hilitStr = u'{0:4d}{1:1s} {2:_>5d}{3:5d} {4:s}\n            {5:4d} {6:s}\n\n'
         
         for agent in range(self.nagents):
-            with open(self.outputDir+'links_for_agent_%s_of_%s.txt'\
-                    %(agent+1,self.nagents),'w') as fout:
+            with codecs.open(self.outputDir+'links_for_agent_%s_of_%s.txt' % (agent+1,self.nagents), 'w', encoding='utf-8') as fout:
 
                 fout.write('Complete link schedule issued to agent %s of %s\n'\
                     %(agent+1,self.nagents))
